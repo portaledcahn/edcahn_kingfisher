@@ -1,0 +1,79 @@
+{% extends 'app/base.html' %}
+
+{% block title %}Collection {{ collection.database_id }}{% endblock %}
+
+{% block header %}Collection {{ collection.database_id }}{% endblock %}
+
+{% block content %}
+
+    <table class="table">
+        <tr>
+            <th>Id</th>
+            <td>{{ collection.database_id }}</td>
+        </tr>
+        <tr>
+            <th>Source</th>
+            <td>{{ collection.source_id }}</td>
+        </tr>
+        <tr>
+            <th>Data Version</th>
+            <td>{{ collection.data_version }}</td>
+        </tr>
+        <tr>
+            <th>Sample</th>
+            <td>{% if collection.sample %}Yes{% else %}No{% endif %}</td>
+        </tr>
+        <tr>
+            <th>Transform Type</th>
+            <td>
+                {% if collection.transform_type %}{{ collection.transform_type }}{% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Transform From</th>
+            <td>
+                {% if collection.transform_type %}
+                    {{ collection.transform_from_collection_id }}
+                    <a href="/app/collection/{{ collection.transform_from_collection_id }}" class="btn btn-primary">View</a>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Store Start</th>
+            <td>{{ collection.store_start_at }}</td>
+        </tr>
+        <tr>
+            <th>Store End</th>
+            <td>{{ collection.store_end_at }}</td>
+        </tr>
+        <tr>
+            <th>Deleted At</th>
+            <td>{{ collection.deleted_at }}</td>
+        </tr>
+        <tr>
+            <th>Check Data</th>
+            <td>{% if collection.check_data %}Yes{% else %}No{% endif %}</td>
+        </tr>
+        <tr>
+            <th>Check Older Data With Schema Version 1.1</th>
+            <td>{% if collection.check_older_data_with_schema_version_1_1 %}Yes{% else %}No{% endif %}</td>
+        </tr>
+    </table>
+
+    <a href="/app/collection/{{ collection.database_id }}/file" class="btn btn-primary">View Files</a>
+
+    <table class="table">
+        <tr>
+            <th>Note</th>
+            <th>At</th>
+        </tr>
+        {% for note in notes %}
+            <tr>
+                <td>{{ note.note }}</td>
+                <td>{{ note.stored_at }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+
+{% endblock %}
