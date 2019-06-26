@@ -30,21 +30,18 @@ publicadores_sources_url = {
 # Formato del archivo a descargar del origen de los publicadores.
 publicadores_sources_file = {
     'SIAFI2': 'ocid_{0}.zip',
-    'HC1': 'HC1_datos_2018_json.zip',
-    'DDC': 'DDC_datos_2018_json.zip',
-    'CE': 'CE_datos_2018_json.zip',
+    'HC1': 'HC1_datos_{0}_json.zip',
+    'DDC': 'DDC_datos_{0}_json.zip',
+    'CE': 'CE_datos_{0}_json.zip',
     'SISOCS': 'SISOCS_{0}.zip'
 }
 
 # Directorio destino para la descarga de los archivos de los publicadores
 publicadores_sources_path = {
-    'SIAFI2': 'C:\\edcahn\\hn_sefin\\siafi2\\descargas\\',
-    'HC1': 'C:\\edcahn\\hn_oncae\\hc1\\descargas\\',
-    'DDC': 'C:\\edcahn\\hn_oncae\\ddc\\descargas\\',
-    'CE': 'C:\\edcahn\\hn_oncae\\ce\\descargas\\',
-    # 'HC1': '/home/aduenas/edcahn/hn_oncae/HC1/descargas',
-    # 'DDC': '/home/aduenas/edcahn/hn_oncae/DDC/descargas',
-    # 'CE': '/home/aduenas/edcahn/hn_oncae/CE/descargas',
+    'SIAFI2': '/home/dba/kingfisher-process/publicadores_data/sefinhn/siafi2/descargas',
+    'HC1': '/home/dba/kingfisher-process/publicadores_data/oncaehn/hc1/descargas',
+    'DDC': '/home/dba/kingfisher-process/publicadores_data/oncaehn/ddc/descargas',
+    'CE': '/home/dba/kingfisher-process/publicadores_data/oncaehn/ce/descargas',
     'SISOCS': '/home/aduenas/edcahn/hn_sisocs/sisocs/descargas'
 }
 
@@ -57,49 +54,43 @@ publicadores_format_download_file = {
 }
 
 publicadores_origen_tipo_archivo_json = {
-    'SIAFI2': 'json-line',
-    'HC1': 'release-package',
-    'DDC': 'release-package',
-    'CE': 'release-package',
-    'SISOCS': 'json-line'
+    'SIAFI2': 'json_line',
+    'HC1': 'release_package',
+    'DDC': 'release_package',
+    'CE': 'release_package',
+    'SISOCS': 'json_line'
 }
 
 publicadores_origen_directorio_kf_json = {
-    'SIAFI2': 'C:\\edcahn\\hn_sefin\\siafi2\\kingfisher\\',
-    'HC1': 'C:\\edcahn\\hn_oncae\\hc1\\kingfisher\\',
-    'DDC': 'C:\\edcahn\\hn_oncae\\ddc\\kingfisher\\',
-    'CE': 'C:\\edcahn\\hn_oncae\\ce\\kingfisher\\',
-    # 'HC1': '/home/aduenas/Publicadores_Edca/ONCAE/HC1/kingfisher\\',
-    # 'DDC': '/home/aduenas/Publicadores_Edca/ONCAE/DDC/kingfisher\\',
-    # 'CE': '/home/aduenas/Publicadores_Edca/ONCAE/CE/kingfisher\\',
-    'SISOCS': '/home/aduenas/Publicadores_Edca/SISOCS/SISOCS/kingfisher\\'
+    'SIAFI2': '/home/dba/kingfisher-process/publicadores_data/sefinhn/siafi2/kingfisher/',
+    'HC1': '/home/dba/kingfisher-process/publicadores_data/oncaehn/hc1/kingfisher/',
+    'DDC': '/home/dba/kingfisher-process/publicadores_data/oncaehn/ddc/kingfisher/',
+    'CE': '/home/dba/kingfisher-process/publicadores_data/oncaehn/ce/kingfisher/',
+    'SISOCS': '/home/aduenas/Publicadores_Edca/SISOCS/SISOCS/kingfisher/'
 }
 
 # Parametro para la configuracion del directorio para almacenar los HASH
 publicadores_origen_directorio_hash = {
-    'SIAFI2': 'C:\\edcahn\\hn_sefin\\siafi2\\hash',
-    'DDC': 'C:\\edcahn\\hn_oncae\\ddc\\hash\\'
+    'SIAFI2': '/home/dba/kingfisher-process/publicadores_data/sefinhn/siafi2/hash',
+    'HC1': '/home/dba/kingfisher-process/publicadores_data/oncaehn/hc1/hash',
+    'DDC': '/home/dba/kingfisher-process/publicadores_data/oncaehn/ddc/hash',
+    'CE': '/home/dba/kingfisher-process/publicadores_data/oncaehn/ce/hash',
+    'SISOCS': '/home/dba/kingfisher-process/publicadores_data/sisocshn/'
 }
 
 publicadores_origen_hash_json = {
-    'SIAFI2': 'C:\\edcahn\\hn_sefin\\siafi2\\hash\\SIAFI2_json.hash',
-    'HC1': 'C:\\edcahn\\hn_oncae\\hc1\\hash\\hc1_json.hash',
-    'DDC': 'C:\\edcahn\\hn_oncae\\ddc\\hash\\ddc_json.hash',
-    'CE': 'C:\\edcahn\\hn_oncae\\ce\\hash\\ce_json.hash',
-    # 'HC1': '/home/aduenas/Publicadores_Edca/ONCAE/HC1/hash/HC1_json.hash',
-    # 'DDC': '/home/aduenas/Publicadores_Edca/ONCAE/DDC/hash/DDC_json.hash',
-    # 'CE': '/home/aduenas/Publicadores_Edca/ONCAE/CE/hash/CE_json.hash',
+    'SIAFI2': '/home/dba/kingfisher-process/publicadores_data/sefinhn/siafi2/hash/SIAFI2_json.hash',
+    'HC1': '/home/dba/kingfisher-process/publicadores_data/oncaehn/hc1/hash/hc1_json.hash',
+    'DDC': '/home/dba/kingfisher-process/publicadores_data/oncaehn/ddc/hash/ddc_json.hash',
+    'CE': '/home/dba/kingfisher-process/publicadores_data/oncaehn/ce/hash/ce_json.hash',
     'SISOCS': '/home/aduenas/Publicadores_Edca/SISOCS/SISOCS/hash/SISOCS_json.hash'
 }
 
 publicadores_origen_historico = {
-    'SIAFI2': 'C:\\edcahn\\hn_sefin\\siafi2\\historico\\',
-    'HC1': 'C:\\edcahn\\hn_oncae\\hc1\\historico\\',
-    'DDC': 'C:\\edcahn\\hn_oncae\\ddc\\historico\\',
-    'CE': 'C:\\edcahn\\hn_oncae\\ce\\historico\\',
-    # 'HC1': '/home/aduenas/Publicadores_Edca/ONCAE/HC1/historico/',
-    # 'DDC': '/home/aduenas/Publicadores_Edca/ONCAE/DDC/historico/',
-    # 'CE': '/home/aduenas/Publicadores_Edca/ONCAE/CE/historico/',
+    'SIAFI2': '/home/dba/kingfisher-process/publicadores_data/sefinhn/siafi2/historico/',
+    'HC1': '/home/dba/kingfisher-process/publicadores_data/oncaehn/hc1/historico/',
+    'DDC': '/home/dba/kingfisher-process/publicadores_data/oncaehn/ddc/historico/',
+    'CE': '/home/dba/kingfisher-process/publicadores_data/oncaehn/ce/historico/',
     'SISOCS': '/home/aduenas/edcahn/hn_sisocs/sisocs/historico/'
 }
 
@@ -116,14 +107,14 @@ publicadores_origen_logger = {
 
 # Sistemas origen de los publicadores.
 publicadores_id_collection = {
-    'HN.SEFIN': 2,
+    'HN.SEFIN': 1,
     'HN.ONCAE': 1,
-    'HN.SISOCS': 3
+    'HN.SISOCS': 1
 }
 
 # Sistemas origen de los publicadores.
 publicadores_id_collection_record = {
     'HN.SEFIN': 2,
-    'HN.ONCAE': 1,
-    'HN.SISOCS': 3
+    'HN.ONCAE': 2,
+    'HN.SISOCS': 2
 }

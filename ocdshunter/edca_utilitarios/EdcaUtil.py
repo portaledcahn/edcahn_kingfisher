@@ -75,12 +75,15 @@ class EdcaUtil:
     def obtener_lista_archivos(directorio, extension):
         # Se inicializa el arreglo
         __archivos = []
+
         # Se obtiene la lista de archivos del directorio
         for archivo in os.listdir(directorio):
             # Se busca unicamente con la extension JSON
             if archivo.endswith(extension):
                 __archivos.append(os.path.join(directorio, archivo))
                 return __archivos
+        # se manda limpio el arreglo en caso de no encontrar archivos
+        __archivos = None
 
     # funcion para obtener el listado de archivos de un directorio
     @staticmethod
@@ -97,13 +100,29 @@ class EdcaUtil:
     # funcion para obtener el listado de archivos de un directorio
     @staticmethod
     def move_file_to(archivo, origen, destino):
-        #print("mover : " + origen + " --> " + destino)
+        # print("mover : " + origen + " --> " + destino)
         if archivo != "*":
             shutil.move(origen + archivo, destino + archivo)
 
-        for file in EdcaUtil.obtener_lista_archivos(origen, ".json"):
-            print("mover : " + file + " --> " + destino + EdcaUtil.path_leaf(file))
-            shutil.move(file, destino + EdcaUtil.path_leaf(file))
+        # si el directorio origen tiene archivos para mover.
+        if len(os.listdir(origen)) != 0:
+            for file in EdcaUtil.obtener_lista_archivos(origen, ".json"):
+                print("mover : " + file + " --> " + destino + EdcaUtil.path_leaf(file))
+                shutil.move(file, destino + EdcaUtil.path_leaf(file))
+
+    # Existen archivos JSon en directorio
+    @staticmethod
+    def existen_archivos_json(directorio):
+        l = 0
+        # Se obtiene la lista de archivos del directorio
+        for archivo in os.listdir(directorio):
+            # Se busca unicamente con la extension JSON
+            if archivo.endswith(".json"):
+                l = l + 1
+        if l == 0:
+            return False
+        
+        return True
 
     # funcion para obtener el listado de archivos de un directorio
     @staticmethod

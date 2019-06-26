@@ -12,13 +12,11 @@ Descripcion : Clase destinada para la cargar de los archivos JSON Line
 MM/DD/YYYY    Colaboradores   Descripcion
 05/07/2019    Alla Duenas     Creacion.    
 """
-
-import os
-
+from edca_core import KingFisherInterface as kf
 from edca_core import Publicadores as pb
+from edca_logs.EdcaLogger import EdcaLogger as log
 from edca_mensajes import EdcaErrores as err, EdcaMensajes as msg
 from edca_utilitarios import EdcaUtil as util, ZipTools as zp
-from edca_logs.EdcaLogger import EdcaLogger as log
 
 
 class CargarArchivosKF:
@@ -57,32 +55,36 @@ class CargarArchivosKF:
                 self.__mover_archivos_historico(origen, __directorio_carga)
 
                 # Eliminar los archivos JSon de la carpeta de carga
-                #self.__limpiar_carpeta(__directorio_carga)
+                self.__limpiar_carpeta(__directorio_carga)
 
                 # Generar el archivo de releases package para descarga masiva
                 self.__generar_achivo_masivo()
 
             # log para indicar el inicio del proceso de cargar archivos al king fisher
-            log.registrar_log_info(__name__, err.EdcaErrores.INFO_LOAD_FILEFROMKF_END, self.__event_log, None)
+            log.registrar_log_info(__name__, err.EdcaErrores.INFO_LOAD_FILEFROMKF_END, self.__event_log, "")
         
         except Exception as ex:
             #self.__registrar_bitacora(ex)
-            raise ex
+            raise ex.args
 
     # Recuperar los origenes o sistemas de los Publicadores
-    def __obtener_origenes(self, publicador):
+    @staticmethod
+    def __obtener_origenes(publicador):
         return pb.Publicadores.origenes(publicador)
 
     # Obtener el directorio king fisher del origen para la carga de los JSon
-    def __obtener_directorio_kingfisher(self, origen):
+    @staticmethod
+    def __obtener_directorio_kingfisher(origen):
         return pb.Publicadores.publicador_directorio_kingfisher(origen)
 
     # Obtener el directorio historial del origen o sistema.
-    def __obtener_directorio_historico(self, origen):
+    @staticmethod
+    def __obtener_directorio_historico(origen):
         return pb.Publicadores.publicador_directorio_historico(origen)
 
     # obtener el tipo de archivos json del origen
-    def __obtener_tipo_archivo_json(self, origen):
+    @staticmethod
+    def __obtener_tipo_archivo_json(origen):
         return pb.Publicadores.publicador_tipo_archivo_json(origen)
 
     # Obtener el directorio king fisher del origen para la carga de los JSon
@@ -94,22 +96,13 @@ class CargarArchivosKF:
         return pb.Publicadores.publicador_kf_id_collection_record(self.__publicador)
 
     # Cargar los archivos JSon al King Fisher
-    def __cargar_kingfisher(self, directorio, tipo, id):
-        # Armar la sentensia para carcar el King Fisher segun los parametros
-        log.registrar_log_info(__name__, err.EdcaErrores.INFO_CARGAR_ARCHIVOS_GENERICO, self.__event_log, "python ocdskingfisher-process-cli local-load " + str(id) + " " + directorio + " " + tipo)
-        #os.system("python ocdskingfisher-process-cli local-load " + str(id) + " " + directorio + " " + tipo)        
-
-        # Cerrar la collection
-        log.registrar_log_info(__name__, err.EdcaErrores.INFO_CARGAR_ARCHIVOS_GENERICO, self.__event_log, "python ocdskingfisher-process-cli end-collection-store " + str(id))
-        #os.system("python ocdskingfisher-process-cli end-collection-store " + str(id))
-        
+    def __cargar_kingfisher(self, directorio, tipo, idJson):
         # Recuperar los ID Collection tipo record
         __record_id_colletion = self.__obtener_id_collection_record()
 
-        # Transformar a Releses Record Package
-        log.registrar_log_info(__name__, err.EdcaErrores.INFO_CARGAR_ARCHIVOS_GENERICO, self.__event_log, "python ocdskingfisher-process-cli transform-collection " + str(__record_id_colletion))
-        #os.system("python ocdskingfisher-process-cli transform-collection " + str(__record_id_colletion))
-    
+        # Invocar la interface de KingFisher
+        __kf = kf.KingFisherInterface.ejecutar(idJson, directorio, tipo, __record_id_colletion)
+
     def __mover_archivos_historico(self, origen, directorio):
         # obtener la carpeta historica del origen o sistema
         __directorio_historico = self.__obtener_directorio_historico(origen)
@@ -118,12 +111,14 @@ class CargarArchivosKF:
         log.registrar_log_info(__name__, err.EdcaErrores.INFO_CARGAR_ARCHIVOS_GENERICO, self.__event_log, "Copiando JSON de " + directorio + " --> " + __directorio_historico)        
         util.EdcaUtil.move_file_to("*", directorio, __directorio_historico) # utilitario para mover los archivos json al una carpeta destino
         # Comprimir todos los archivos json en la carpeta historico
-        log.registrar_log_info(__name__, err.EdcaErrores.INFO_CARGAR_ARCHIVOS_GENERICO, self.__event_log, "Comprimiendo los JSON historicos a ZIP")        
-        for archivo in self.__obtener_archivos(__directorio_historico): # obtener todos los json file del historico
-            # comprimir archivo
-            zp.ZipTools.comprimir(archivo, __directorio_historico)
-            # borrar todos los archviso JSon dejando exclusivo los ZIP
-            util.EdcaUtil.borrar_archivo(archivo)
+        #if os.listdir(__directorio_historico) != 0:
+        if util.EdcaUtil.existen_archivos_json(__directorio_historico):
+            log.registrar_log_info(__name__, err.EdcaErrores.INFO_CARGAR_ARCHIVOS_GENERICO, self.__event_log, "Comprimiendo los JSON historicos a ZIP")
+            for archivo in self.__obtener_archivos(__directorio_historico): # obtener todos los json file del historico
+                # comprimir archivo
+                zp.ZipTools.comprimir(archivo, __directorio_historico)
+                # borrar todos los archviso JSon dejando exclusivo los ZIP
+                util.EdcaUtil.borrar_archivo(archivo)
         
     # funcion que permite borrar o limpiar la carpeta de carga king fisher
     def __limpiar_carpeta(self, directorio):
@@ -131,24 +126,32 @@ class CargarArchivosKF:
         # Borrar todos los archivos
         for archivo in self.__obtener_archivos(directorio): # obtener todos los json file del historico
             # borrar todos los archviso JSon dejando exclusivo los ZIP
-            util.EdcaUtil.borrar_archivo(archivo)
+            try:
+                util.EdcaUtil.borrar_archivo(archivo)
+            except Exception as ex:
+                print(str(ex))
+            
+        log.registrar_log_info(__name__, err.EdcaErrores.INFO_CARGAR_ARCHIVOS_GENERICO, self.__event_log, "Directorio " + directorio + " limpiado.")
     
     # funcion para genera el archivo masivo de releses package
     def __generar_achivo_masivo(self):
         pass
     
     # funcion para recupera todos los archivos de un directorio
-    def __obtener_archivos(self, directorio):
+    @staticmethod
+    def __obtener_archivos(directorio):
         return util.EdcaUtil.obtener_lista_archivos(directorio, '.json')
 
     # Registrar bitacora del main o clase princial
-    def __registrar_bitacora(self, code, event, detail):
+    @staticmethod
+    def __registrar_bitacora(code, event, detail):
         #print("Code : " + code + " Event : " + event + " Detail : " + detail) 
         log.registrar_log_info(__name__, code, event, detail)
 
     # Registrar bitacora del main o clase princial
-    def __registrar_bitacora(self, ex):
+    #@staticmethod
+    #def __registrar_bitacora(ex):
         #print(ex) 
-        if hasattr(ex, 'message'):
-            log.registrar_log_exception(__name__, ex.mensaje)
+    #    if hasattr(ex, 'message'):
+    #        log.registrar_log_exception(__name__, ex.mensaje)
         

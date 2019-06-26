@@ -18,9 +18,13 @@ class PublicadoresTareas:
         self.logger = logging.getLogger(__class__.__module__)
 
     def ejecutar(self):
-        Edca(self.__publicador, 1).ejecutar()
+        try:
+            Edca(self.__publicador, 1).ejecutar()
+        except Exception as ex:
+            print(str(ex))
+        
 
     @staticmethod
     def __imprimir(publicador):
-        __test = cfg.get_test_publicadores(publicador)
+        __test = cfg.get_test(publicador)
         print(__test)

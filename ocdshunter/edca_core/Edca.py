@@ -11,11 +11,10 @@ MM/DD/YYYY    Colaboradores   Descripcion
 05/07/2019    Alla Duenas     Creacion.    
 """
 
-from edca_core import Publicadores as pb
-from edca_core import DescargarArchivos as dl
 from edca_core import ArmarArchivosProcesar as bf
-from edca_core import PrepararArchivosKF as kf
 from edca_core import CargarArchivosKF as pf
+from edca_core import DescargarArchivos as dl
+from edca_core import Publicadores as pb
 from edca_mensajes import EdcaErrores as err
 
 
@@ -31,22 +30,25 @@ class Edca:
 
     # Ejecutar el proceso general de descarga publicador y cargar a base datos edca
     def ejecutar(self):
-        self.__validar_publicador()
-        self.__descargar_archivos()
-        self.__preparar_archivos()
-        #self.__PrepararArchivosKF()
-        self.__cargar_king_fisher()
+        try:
+            self.__validar_publicador()
+            self.__descargar_archivos()
+            self.__preparar_archivos()
+            #self.__PrepararArchivosKF()
+            self.__cargar_king_fisher()
+        except Exception as ex:
+            print(str(ex))
 
     # Funcion principal para la descarga de los releases del publicador
     def __descargar_archivos(self):
         dl.DescargarArchivos(self.__publicador, self.__nro_transaction).ejecutar()
 
-    #def __preparar_archivos(self):
-    #    bf.ArmarArchivosProcesar(self.__publicador, self.__nro_transaction).ejecutar()
+    def __preparar_archivos(self):
+        bf.ArmarArchivosProcesar(self.__publicador, self.__nro_transaction).ejecutar()
 
     # Funcion principal para preparar los archivos descargados del publicador
-    def __PrepararArchivosKF(self):
-        kf.PrepararArchivosKF(self.__publicador, self.__nro_transaction).ejecutar()
+    #def __PrepararArchivosKF(self):
+    #    kf.PrepararArchivosKF(self.__publicador, self.__nro_transaction).ejecutar()
 
     # Proceso principal para la carga de los releases al king Fisher (edca)
     def __cargar_king_fisher(self):

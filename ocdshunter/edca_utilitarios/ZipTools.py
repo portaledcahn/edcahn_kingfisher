@@ -19,9 +19,9 @@ class ZipTools:
     def comprimir(archivo, dir_comprimir):
         __archivo_zip = archivo[:archivo.find(".")] + ".zip"
         try:
-            with zipfile.ZipFile(__archivo_zip,'w', zipfile.ZIP_DEFLATED) as zip:
-                zip.write(archivo)
-            zip.close()
+            with zipfile.ZipFile(__archivo_zip,'w', zipfile.ZIP_DEFLATED) as archivoZip:
+                archivoZip.write(archivo)
+            archivoZip.close()
 
         except PermissionError:
             log.registrar_log_error(__name__, err.EdcaErrores.ERR_ZIPTOOL_UNZIP, "EXTRAER ARCHIVO",

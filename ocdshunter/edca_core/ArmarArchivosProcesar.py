@@ -10,16 +10,17 @@ MM/DD/YYYY    Colaboradores   Descripcion
 """
 
 import json
-import datetime
 import uuid
+from builtins import hasattr, Exception
 
-from edca_core import Publicadores as pb
-from edca_mensajes import EdcaErrores as err, EdcaMensajes as msg
-from edca_utilitarios import EdcaUtil as util, ZipTools as zp
-from edca_logs.EdcaLogger import EdcaLogger as log
 from config import edca_global_config as cfg
+from edca_core import Publicadores as pb
+from edca_logs.EdcaLogger import EdcaLogger as log
+from edca_mensajes import EdcaErrores as err, EdcaMensajes as msg
+from edca_utilitarios import EdcaUtil as util
 
-class ArmarArchivosProcesar():
+
+class ArmarArchivosProcesar:
     __event_log = "Praparar Achivos para KF"
 
     def __init__(self, publicador, nro_transaccion):
@@ -57,21 +58,24 @@ class ArmarArchivosProcesar():
             #print(err.EdcaErrores.INFO_BUILD_FILEFROMKF_END + " : " + self.__msg.getMessageError(err.EdcaErrores.INFO_BUILD_FILEFROMKF_END))
             log.registrar_log_info(__name__, err.EdcaErrores.INFO_BUILD_FILEFROMKF_END, self.__event_log, None)
         except Exception as ex:
-            self.__registrar_bitacora(ex)
+            self.__registrar_bitacora(ex.args)
 
     # Recuperar los origenes o sistemas de los Publicadores
-    def __obtener_origenes(self, publicador):
+    @staticmethod
+    def __obtener_origenes(publicador):
         return pb.Publicadores.origenes(publicador)
 
     # Recuperar la ruta o direccion donde se guardara los archivo descargados
-    def __obtener_ruta_descarga(self, origen):
+    @staticmethod
+    def __obtener_ruta_descarga(origen):
         __directorio = pb.Publicadores.origen_directorio(origen)
         if __directorio is None:
             raise Exception(err.EdcaErrores.ERR_PUBLISHER_NOPATH)
         return __directorio
 
     # funcion para recupera todos los archivos de un directorio
-    def __obtener_archivos(self, directorio):
+    @staticmethod
+    def __obtener_archivos(directorio):
         return util.EdcaUtil.obtener_lista_archivos(directorio, '.json')
 
     # se evalua el archivo, extraendo los releases para ser validados por un hash
@@ -145,36 +149,43 @@ class ArmarArchivosProcesar():
         archivojson.close() # cerrar archivo json origen
 
     # buscar el hash en el archivo de hash
-    def __buscar_hash(self, origen, hsh):
+    @staticmethod
+    def __buscar_hash(origen, hsh):
         archivo = pb.Publicadores.publicador_archivo_hash(origen)
         if hsh in open(archivo,"r").read():
             return True
         return False
 
     # convierte el json string en un hash md5
-    def __obtener_hash(self, str):
-        return util.EdcaUtil().string_to_hash(str)
+    @staticmethod
+    def __obtener_hash(cadena):
+        return util.EdcaUtil().string_to_hash(cadena)
 
     # obtener el tipo de archivos json del origen
-    def __obtener_tipo_archivo_json(self, origen):
+    @staticmethod
+    def __obtener_tipo_archivo_json(origen):
         return pb.Publicadores.publicador_tipo_archivo_json(origen)
 
     # Obtener el directorio para colocar los archivos y cargar al king fisher
-    def __obtener_directorio_kingfisher(self, origen):
+    @staticmethod
+    def __obtener_directorio_kingfisher(origen):
         return pb.Publicadores.publicador_directorio_kingfisher(origen)
         
     # recupera el archivo archivo de los json hash
-    def __obtener_archivo_hash(self, origen):
+    @staticmethod
+    def __obtener_archivo_hash(origen):
         return pb.Publicadores.publicador_archivo_hash(origen)
 
     # Registrar bitacora del main o clase princial
-    def __registrar_bitacora(self, code, event, detail):
+    @staticmethod
+    def __registrar_bitacora(code, event, detail):
         #print("Code : " + code + " Event : " + event + " Detail : " + detail) 
         log.registrar_log_info(__name__, code, event, detail)
 
     # Registrar bitacora del main o clase princial
-    def __registrar_bitacora(self, ex):
-        #print(ex) 
-        if hasattr(ex, 'message'):
-            log.registrar_log_exception(__name__, ex.mensaje)
+    #@staticmethod
+    #def __registrar_bitacora(ex):
+    #    #print(ex)
+    #    if hasattr(ex, 'message'):
+    #        log.registrar_log_exception(__name__, ex.mensaje)
         

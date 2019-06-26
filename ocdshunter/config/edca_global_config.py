@@ -29,5 +29,5 @@ catalogo_prepare_kingfisher = 4
 catalogo_load_data_kingfisher = 5
 
 # Catalogo de tipo archivo json
-tipo_archivo_json_line = "json-line"
-tipo_archivo_releasepackage = "release-package"
+tipo_archivo_json_line = "json_line"
+tipo_archivo_releasepackage = "release_package"
