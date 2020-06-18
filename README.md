@@ -8,3 +8,9 @@ El proyecto esta conformado por dos principales componentes:
 
 2.- OCDS Hunter v1.0 componente desarrollado para la descarga, extraccion y carga de datos a kingfisher-process.
 
+--------------------------------------------------------------------
+OCDS Hunter v2.0 - Proyecto Portal EDCA Honduras
+--------------------------------------------------------------------
+Se realiza la liberación del OCDS Hunter en su versión 2.0, en donde se realizan mejoras de rendimiento, procesamiento, control de flujos de trabajo, incorporación de hilos, etc.
+
+Fecha Release: 18/06/2020
