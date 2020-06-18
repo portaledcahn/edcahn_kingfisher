@@ -92,5 +92,15 @@ class EdcaMensajes:
             return "Deshaciendo Transaccion Almacenada en la Base de Datos."
         if cod_error == 'EDCA-DB007':
             return "Error de Base de Datos: %s"
+        if cod_error == 'EDCA-TH001':
+            return "****** %s ******"
+        if cod_error == 'EDCA-TH002':
+            return "****** %s ******"
+        if cod_error == 'EDCA-TH003':
+            return "****** %s ******"
+        if cod_error == 'EDCA-TH004':
+            return "****** %s ******"
+        if cod_error == 'EDCA-TH005':
+            return "****** %s ******"
 
         return "Codigo de error no definido"

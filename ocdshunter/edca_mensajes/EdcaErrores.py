@@ -85,3 +85,19 @@ class EdcaErrores(object):
     # Tipos de Eventos: Informativo (INFO)
     #                   Error (ERR)
     INFO_CARGAR_ARCHIVOS_GENERICO = "EDCA-CK001"
+
+    # Codigo de Finalizacion Carga de KingFisher
+    # Tipos de Eventos: Informativo (INFO)
+    #                   Error (ERR)
+    INFO_FIN_KF = "EDCA-KF002"
+
+
+    # Codigo de Mensajes para los Threads
+    # Tipos de Eventos : Informativo (INFO)
+    #                    Error (ERR)
+    INFO_OCDS_HUNTER_THREAD_START = "EDCA-TH001"
+    INFO_OCDS_HUNTER_THREAD_LOCK = "EDCA-TH002"
+    INFO_OCDS_HUNTER_THREAD_UNLOCK = "EDCA-TH003"
+    INFO_OCDS_HUNTER_THREAD_FINISH = "EDCA-TH004"
+    INFO_OCDS_HUNTER_THREAD_GENERAL = "EDCA-TH005"
+
