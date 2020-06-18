@@ -12,6 +12,9 @@ Descripcion : Clase destinada para la cargar de los archivos JSON Line
 MM/DD/YYYY    Colaboradores   Descripcion
 05/07/2019    Alla Duenas     Creacion.    
 """
+
+
+
 from edca_core import KingFisherInterface as kf
 from edca_core import Publicadores as pb
 from edca_logs.EdcaLogger import EdcaLogger as log
@@ -40,28 +43,52 @@ class CargarArchivosKF:
             for origen in self.__origenes:
                 # se obtiene el directorio de carga king fisher del origen
                 __directorio_carga = self.__obtener_directorio_kingfisher(origen)
+                execKF=True
+
+                # Existen archivos en el directorio
+                if util.EdcaUtil.existen_archivos_json(__directorio_carga):
+                    log.registrar_log_info(__name__, err.EdcaErrores.INFO_LOAD_FILEFROMKF_BEGIN, self.__event_log,
+                                           "EXISTE ARCHIVOS JSON--> " + str(__directorio_carga))
+                    # Tienen registros los archivos
+                    execKF=False
+                    for archivo in util.EdcaUtil.obtener_lista_solo_archivos(__directorio_carga, 'json'):
+                        log.registrar_log_info(__name__, err.EdcaErrores.INFO_LOAD_FILEFROMKF_BEGIN, self.__event_log,
+                                               "ARCHIVOS JSON--> " + str(archivo))
+                        #Se evalua el archivo
+                        if not util.EdcaUtil.validar_cerobytes_archivo(archivo):
+                            execKF=True
+                else:
+                    log.registrar_log_info(__name__, err.EdcaErrores.INFO_LOAD_FILEFROMKF_BEGIN, self.__event_log,
+                                           "NO EXISTEN ARCHIVOS A CARGAR--> " + str(__directorio_carga))
+                    execKF=False
+
                 # se obtiene el formato del archivo json segun el origen o sistema
-                __tipo_archvio_json = self.__obtener_tipo_archivo_json(origen)
+                __tipo_archivo_json = self.__obtener_tipo_archivo_json(origen)
+
                 # se obtiene el numero ID Collection del publicador.
                 __id_collection = self.__obtener_id_collection()
                 
                 # Log para ver los parametros
-                log.registrar_log_info(__name__, err.EdcaErrores.INFO_CARGAR_ARCHIVOS_GENERICO, self.__event_log, "ID Collection = " + str(__id_collection) + ", Directorio = " + __directorio_carga + " Tipo Archivo = " + __tipo_archvio_json)
+                log.registrar_log_info(__name__, err.EdcaErrores.INFO_CARGAR_ARCHIVOS_GENERICO, self.__event_log, "ID Collection = " + str(__id_collection) + ", Directorio = " + __directorio_carga + " Tipo Archivo = " + __tipo_archivo_json)
 
                 # Cargar los archivos json al king fisher
-                self.__cargar_kingfisher(__directorio_carga, __tipo_archvio_json, __id_collection)
+                if execKF == True:
+                    self.__cargar_kingfisher(__directorio_carga, __tipo_archivo_json, __id_collection)
 
                 # Mover los archivos a la carpeta de historico
                 self.__mover_archivos_historico(origen, __directorio_carga)
 
                 # Eliminar los archivos JSon de la carpeta de carga
-                self.__limpiar_carpeta(__directorio_carga)
+                #self.__limpiar_carpeta(__directorio_carga)
+
+                # Eliminar los archivos JSon de la carpeta de carga
+                #self.__limpiar_carpeta_descargas(__directorio_carga)
 
                 # Generar el archivo de releases package para descarga masiva
-                self.__generar_achivo_masivo()
+                #self.__generar_achivo_masivo()
 
             # log para indicar el inicio del proceso de cargar archivos al king fisher
-            log.registrar_log_info(__name__, err.EdcaErrores.INFO_LOAD_FILEFROMKF_END, self.__event_log, "")
+            log.registrar_log_info(__name__, err.EdcaErrores.INFO_FIN_KF, self.__event_log, "****** FIN ETAPA 3 ******")
         
         except Exception as ex:
             #self.__registrar_bitacora(ex)
@@ -78,12 +105,12 @@ class CargarArchivosKF:
         return pb.Publicadores.publicador_directorio_kingfisher(origen)
 
     # Obtener el directorio historial del origen o sistema.
-    @staticmethod
+    @staticmethod                 
     def __obtener_directorio_historico(origen):
         return pb.Publicadores.publicador_directorio_historico(origen)
 
     # obtener el tipo de archivos json del origen
-    @staticmethod
+    @staticmethod                 
     def __obtener_tipo_archivo_json(origen):
         return pb.Publicadores.publicador_tipo_archivo_json(origen)
 
@@ -132,7 +159,24 @@ class CargarArchivosKF:
                 print(str(ex))
             
         log.registrar_log_info(__name__, err.EdcaErrores.INFO_CARGAR_ARCHIVOS_GENERICO, self.__event_log, "Directorio " + directorio + " limpiado.")
-    
+
+    # funcion que permite borrar o limpiar la carpeta de carga king fisher
+    def __limpiar_carpeta_descargas(self, directorio):
+        log.registrar_log_info(__name__, err.EdcaErrores.INFO_CARGAR_ARCHIVOS_GENERICO, self.__event_log,
+                                   "Limpiar los archivos JSON de " + directorio)
+        # Borrar todos los archivos
+        for archivo in util.EdcaUtil.obtener_lista_archivos(directorio, '.json'):  # obtener todos los json file del historico
+            # borrar todos los archviso JSon dejando exclusivo los ZIP
+            try:
+                util.EdcaUtil.borrar_archivo(archivo)
+            except Exception as ex:
+                #print(str(ex))
+                log.registrar_log_info(__name__, err.EdcaErrores.INFO_CARGAR_ARCHIVOS_GENERICO, self.__event_log,
+                                       "Exception: --> " + str(ex))
+
+        log.registrar_log_info(__name__, err.EdcaErrores.INFO_CARGAR_ARCHIVOS_GENERICO, self.__event_log,
+                                   "Directorio " + directorio + " limpiado.")
+
     # funcion para genera el archivo masivo de releses package
     def __generar_achivo_masivo(self):
         pass
@@ -150,8 +194,7 @@ class CargarArchivosKF:
 
     # Registrar bitacora del main o clase princial
     #@staticmethod
-    #def __registrar_bitacora(ex):
+    #def __registrar_bitacora(self, ex):
         #print(ex) 
     #    if hasattr(ex, 'message'):
-    #        log.registrar_log_exception(__name__, ex.mensaje)
-        
+    #       log.registrar_log_exception(__name__, ex.mensaje)
