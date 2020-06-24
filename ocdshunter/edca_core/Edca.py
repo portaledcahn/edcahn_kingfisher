@@ -16,6 +16,7 @@ from edca_core import CargarArchivosKF as pf
 from edca_core import DescargarArchivos as dl
 from edca_core import Publicadores as pb
 from edca_mensajes import EdcaErrores as err
+from edca_utilitarios import EdcaUtil as Util
 
 
 # Clase principal para todo el proceso de carga de los publicadores
@@ -34,10 +35,9 @@ class Edca:
             self.__validar_publicador()
             self.__descargar_archivos()
             self.__preparar_archivos()
-            #self.__PrepararArchivosKF()
             self.__cargar_king_fisher()
         except Exception as ex:
-            print(str(ex))
+            print(str(ex.args))
 
     # Funcion principal para la descarga de los releases del publicador
     def __descargar_archivos(self):
@@ -45,10 +45,6 @@ class Edca:
 
     def __preparar_archivos(self):
         bf.ArmarArchivosProcesar(self.__publicador, self.__nro_transaction).ejecutar()
-
-    # Funcion principal para preparar los archivos descargados del publicador
-    #def __PrepararArchivosKF(self):
-    #    kf.PrepararArchivosKF(self.__publicador, self.__nro_transaction).ejecutar()
 
     # Proceso principal para la carga de los releases al king Fisher (edca)
     def __cargar_king_fisher(self):
@@ -68,3 +64,8 @@ class Edca:
     @staticmethod
     def __registrar_bitacora(evento):
         return evento
+
+    # Eliminar archivos
+    @staticmethod
+    def __eliminar_archivo_zip(archivo):
+        Util.EdcaUtil.borrar_archivo(archivo)

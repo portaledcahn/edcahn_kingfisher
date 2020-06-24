@@ -9,7 +9,7 @@ MM/DD/YYYY    Colaboradores   Descripcion
 import logging
 from PublicadoresCalendario import PublicadoresCalendarios as cfg
 from edca_core.Edca import Edca
-
+from ocdshunter_control import OcdsHunter_Control as ctrl
 
 class PublicadoresTareas:
 
@@ -19,12 +19,26 @@ class PublicadoresTareas:
 
     def ejecutar(self):
         try:
+            #if not self.__validarBloqueo():
+            #    self.__bloquear()
             Edca(self.__publicador, 1).ejecutar()
+            #    self.__desBloquear()
+        
         except Exception as ex:
             print(str(ex))
+            self.__desBloquear()
+            
         
-
     @staticmethod
     def __imprimir(publicador):
         __test = cfg.get_test(publicador)
         print(__test)
+
+    def __validarBloqueo(self):
+        return ctrl().bloqueado()
+    
+    def __bloquear(self):
+        ctrl().bloquear()
+
+    def __desBloquear(self):
+        ctrl().desBloquear()

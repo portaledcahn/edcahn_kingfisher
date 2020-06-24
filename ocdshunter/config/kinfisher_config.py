@@ -8,9 +8,10 @@ MM/DD/YYYY    Colaboradores   Descripcion
 """
 
 # Parametros por defecto
-kf_interprete = 'python'
-kf_directorio = '/home/dba/kingfisher-process/'
-kf_nombre_coleccion = 'OCDSHN'
+kf_interprete = '/home/adminaedca/portaledcahn_database/portaledcahnDB_env/bin/python'
+kf_directorio = '/home/adminaedca/portaledcahn_database/edcahn_kingfisher/kingfisher-processHN/'
+kf_nombre_coleccion = 'EDCAHN'
+
 
 # Comando para crear una collection
 kf_comando_crear_coleccion = 'ocdskingfisher-process-cli new-collection {0} "{yyyy}-{mm}-{dd} {hh24}:{mi}:{ss}"'

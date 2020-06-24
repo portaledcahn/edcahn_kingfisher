@@ -2,7 +2,7 @@
 -e git+https://github.com/OpenDataServices/lib-cove.git@52acb2f0dcd296b9d952ff2adbae61dc4f8dd296#egg=libcove
 -e git+https://github.com/open-contracting/lib-cove-ocds.git@8a3d696eb614063bdec1790c0e3fda68d0445040#egg=libcoveocds
 alembic==1.0.9
-bleach==3.1.0
+bleach==3.1.4
 blinker==1.4
 cached-property==1.5.1
 certifi==2019.3.9
