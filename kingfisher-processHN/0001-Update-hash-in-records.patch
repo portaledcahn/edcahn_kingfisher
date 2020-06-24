@@ -1,0 +1,44 @@
+From 75fc7d371e5912860f7f62aa8198c94e9e024c1c Mon Sep 17 00:00:00 2001
+From: Romina Fernandez <romifz@gmail.com>
+Date: Wed, 24 Jun 2020 09:51:23 -0400
+Subject: [PATCH] Update hash in records
+
+---
+ .../ocdskingfisherprocess/transform/record_new_only.py         | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/kingfisher-processHN/ocdskingfisherprocess/transform/record_new_only.py b/kingfisher-processHN/ocdskingfisherprocess/transform/record_new_only.py
+index 51a377c..31e045b 100644
+--- a/kingfisher-processHN/ocdskingfisherprocess/transform/record_new_only.py
++++ b/kingfisher-processHN/ocdskingfisherprocess/transform/record_new_only.py
+@@ -1,4 +1,5 @@
+ from ocdskingfisherprocess.transform.base import BaseTransform
++from ocdskingfisherprocess.util import get_hash_md5_for_data
+ import sqlalchemy as sa
+ import ocdsmerge
+ import datetime
+@@ -103,15 +104,16 @@ class RecordTransformNewOnly(BaseTransform):
+         versionedRelease = ocdsmerge.merge_versioned(releases)
+ 
+         out = {'ocid':ocid,'releases':releases,'compiledRelease':compiledRelease,'versionedRelease':versionedRelease}
+-
+         recordDataId = self.get_record_data_by_ocid(ocid)
+ 
+         if recordDataId is not None:
++            hash_md5 = get_hash_md5_for_data(data)
++
+             with self.database.get_engine().begin() as engine:
+                 query = engine.execute(sa.text(
+                     " UPDATE data " +
+-                    " SET data = :data" +
++                    " SET data = :data, hash_md5 = :hash" +
+                     " WHERE id = :data_id "
+-                ), data=json.dumps(out),data_id=recordDataId)
++                ), data=json.dumps(out),hash=hash_md5,data_id=recordDataId)
+         else:
+-            self.store.store_file_item(ocid+'.json', None, 'record', out, 1)
+\ No newline at end of file
++            self.store.store_file_item(ocid+'.json', None, 'record', out, 1)
+-- 
+2.7.4
+
