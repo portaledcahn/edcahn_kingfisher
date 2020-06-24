@@ -2,7 +2,7 @@
 -e git+https://github.com/OpenDataServices/lib-cove.git@52acb2f0dcd296b9d952ff2adbae61dc4f8dd296#egg=libcove
 -e git+https://github.com/open-contracting/lib-cove-ocds.git@8a3d696eb614063bdec1790c0e3fda68d0445040#egg=libcoveocds
 alembic==1.0.9
-bleach==3.1.0
+bleach==3.1.4
 blinker==1.4
 cached-property==1.5.1
 certifi==2019.3.9
@@ -10,7 +10,7 @@ chardet==3.0.4
 click==7.0
 commonmark==0.8.1
 contextlib2==0.5.5
-django==2.2
+django==2.2.13
 et-xmlfile==1.0.1
 flask==1.0.2
 future==0.17.1
@@ -43,5 +43,5 @@ sqlparse==0.3.0
 strict-rfc3339==0.7
 urllib3==1.24.2
 webencodings==0.5.1
-werkzeug==0.15.2
+werkzeug==0.15.3
 xmltodict==0.12.0

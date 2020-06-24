@@ -17,7 +17,7 @@ logger = True
 historico = True
 
 # Archivo looger
-logger_file = 'C:\edcahn\logs\edcahn_app.log'
+logger_file = '/home/adminaedca/portaledcahn_database/edcahn_kingfisher/edcahn/logs/edcahn_app.log'
 logger_config_ini = 'edca_logs/EdcaLoggerConfig.ini'
 logger_print_console = True
 
@@ -29,5 +29,7 @@ catalogo_prepare_kingfisher = 4
 catalogo_load_data_kingfisher = 5
 
 # Catalogo de tipo archivo json
-tipo_archivo_json_line = "json_line"
+tipo_archivo_json_line = "release_package_json_lines"
 tipo_archivo_releasepackage = "release_package"
+
+lap_timer_run_process = 48

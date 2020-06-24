@@ -2,7 +2,7 @@
 """
 from setuptools import setup
 
-install_requires = []
+install_requires = ['requests', 'schedule', 'unidecode']
 
 with open('./requirements.txt') as requirements_txt:
     requirements = requirements_txt.read().strip().splitlines()
@@ -16,7 +16,7 @@ with open('./requirements.txt') as requirements_txt:
 
 setup(
     name='edcahn',
-    version='1.0.0',
+    version='0.0.0',
     author='EDCA HN',
     author_email='ocdshunter@edca.gob.hn',
     url='https://github.com/portaledcahn/edcahn_kingfisher',
