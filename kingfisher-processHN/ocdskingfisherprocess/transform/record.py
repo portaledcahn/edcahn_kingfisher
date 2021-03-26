@@ -73,8 +73,17 @@ class RecordTransform(BaseTransform):
             for row in query:
                 releases.append(self.database.get_data(row['data_id']))
 
-        compiledRelease = ocdsmerge.merge(releases)
-        versionedRelease = ocdsmerge.merge_versioned(releases)
+        ## lineas originales #
+        # compiledRelease = ocdsmerge.merge(releases)
+        # versionedRelease = ocdsmerge.merge_versioned(releases)
+        ## Fin lineas originales #
+
+        ## nuevas lineas #
+        schemaFullPath = '/home/iaip_edca/import_data_kingfisher/esquema/extended-schema.json'
+        merger = ocdsmerge.Merger(schema=schemaFullPath)
+        compiledRelease = merger.create_compiled_release(releases)
+        versionedRelease = merger.create_versioned_release(releases)
+        ## Fin nuevas lineas #
 
         out = {'ocid':ocid,'releases':releases,'compiledRelease':compiledRelease,'versionedRelease':versionedRelease}
 

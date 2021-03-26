@@ -74,6 +74,14 @@ class CompileReleasesTransform(BaseTransform):
             for row in query:
                 releases.append(self.database.get_data(row['data_id']))
 
-        out = ocdsmerge.merge(releases)
+        ### Lineas originales
+        # out = ocdsmerge.merge(releases)
+        ### Fin Lineas originales
+        
+        ### Lineas nuevas
+        schemaFullPath = '/home/iaip_edca/import_data_kingfisher/esquema/extended-schema.json'
+        merger = ocdsmerge.Merger(schema=schemaFullPath)
+        out = merger.create_compiled_release(releases)
+        ### Fin Lineas nuevas
 
         self.store.store_file_item(ocid+'.json', None, 'compiled_release', out, 1)
