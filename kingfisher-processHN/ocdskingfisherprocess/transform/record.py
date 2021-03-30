@@ -1,4 +1,5 @@
 from ocdskingfisherprocess.transform.base import BaseTransform
+from ocdskingfisherprocess.transform import PATH_EXTENDED_OCDS_ESCHEMA
 import sqlalchemy as sa
 import ocdsmerge
 import datetime
@@ -79,8 +80,7 @@ class RecordTransform(BaseTransform):
         ## Fin lineas originales #
 
         ## nuevas lineas #
-        schemaFullPath = '/home/iaip_edca/import_data_kingfisher/esquema/extended-schema.json'
-        merger = ocdsmerge.Merger(schema=schemaFullPath)
+        merger = ocdsmerge.Merger(schema=PATH_EXTENDED_OCDS_ESCHEMA)
         compiledRelease = merger.create_compiled_release(releases)
         versionedRelease = merger.create_versioned_release(releases)
         ## Fin nuevas lineas #
